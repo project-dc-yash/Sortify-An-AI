@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortify: 3-Way Segregation System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Animation for the conveyor belt */
+        @keyframes scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 0; }
+        }
+        .conveyor-belt {
+            background-image: repeating-linear-gradient(90deg, #4b5563, #4b5563 45px, #374151 45px, #374151 50px);
+            background-size: 50px 100%;
+            animation: scroll 1s linear infinite;
+        }
+        .bin-dry { border-top: 8px solid #60a5fa; }     /* Blue */
+        .bin-wet { border-top: 8px solid #34d399; }     /* Green */
+        .bin-metal { border-top: 8px solid #f87171; }   /* Red */
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <header class="bg-white shadow-md p-6 mb-8">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-800">Garbage Segregation: <span class="text-emerald-600">3-Way Partition</span></h1>
+            <a href="home.html" class="text-indigo-600 font-medium hover:underline">← Back to Home</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4">
+        
+        <section class="bg-white rounded-2xl shadow-xl p-8 mb-8 overflow-hidden">
+            <h2 class="text-xl font-semibold mb-6 text-gray-700">Live Process Monitor</h2>
+            
+            <div class="relative h-48 bg-gray-200 rounded-xl flex items-center px-10 border-b-4 border-gray-300">
+                <div class="absolute left-1/4 -top-4 w-12 h-24 bg-gray-800 rounded-b-lg border-x-4 border-yellow-500 flex flex-col items-center justify-end pb-2">
+                    <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_red]"></div>
+                    <span class="text-[10px] text-white mt-1">AI SENSOR</span>
+                </div>
+
+                <div class="w-full h-12 conveyor-belt rounded-full flex items-center justify-center">
+                    <div id="waste-item" class="w-10 h-10 bg-white border-2 border-gray-400 rounded shadow-md transform transition-all duration-700 opacity-0">
+                        <img id="item-img" src="" alt="" class="w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div id="status-card" class="p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
+                    <p class="text-xs uppercase text-gray-500 font-bold">Current Detection</p>
+                    <p id="detection-text" class="text-xl font-mono text-gray-800">Scanning...</p>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-indigo-400">
+                    <p class="text-xs uppercase text-gray-500 font-bold">Confidence Level</p>
+                    <p id="confidence-text" class="text-xl font-mono text-gray-800">--%</p>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-yellow-400">
+                    <p class="text-xs uppercase text-gray-500 font-bold">Actuator Position</p>
+                    <p id="servo-text" class="text-xl font-mono text-gray-800">Neutral</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bin-dry bg-white p-6 rounded-xl shadow-lg text-center">
+                <h3 class="text-blue-600 font-bold text-lg mb-2">DRY WASTE</h3>
+                <p class="text-3xl font-bold text-gray-800" id="count-dry">0</p>
+                <p class="text-sm text-gray-500">Plastic, Paper, Cardboard</p>
+            </div>
+            <div class="bin-wet bg-white p-6 rounded-xl shadow-lg text-center">
+                <h3 class="text-emerald-600 font-bold text-lg mb-2">WET WASTE</h3>
+                <p class="text-3xl font-bold text-gray-800" id="count-wet">0</p>
+                <p class="text-sm text-gray-500">Food, Organic, Peels</p>
+            </div>
+            <div class="bin-metal bg-white p-6 rounded-xl shadow-lg text-center">
+                <h3 class="text-red-600 font-bold text-lg mb-2">METALLIC</h3>
+                <p class="text-3xl font-bold text-gray-800" id="count-metal">0</p>
+                <p class="text-sm text-gray-500">Cans, Foil, Iron</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Simulation Logic
+        const wasteTypes = [
+            { name: 'Plastic Bottle', type: 'dry', confidence: '98%', color: '#60a5fa' },
+            { name: 'Apple Core', type: 'wet', confidence: '94%', color: '#34d399' },
+            { name: 'Soda Can', type: 'metal', confidence: '99%', color: '#f87171' }
+        ];
+
+        let counts = { dry: 0, wet: 0, metal: 0 };
+
+        function simulateDetection() {
+            const item = wasteTypes[Math.floor(Math.random() * wasteTypes.length)];
+            const div = document.getElementById('waste-item');
+            
+            // 1. Show item entering belt
+            div.style.opacity = '1';
+            div.style.transform = 'translateX(-200px)';
+            
+            setTimeout(() => {
+                // 2. Item reaches sensor
+                div.style.transform = 'translateX(0px)';
+                document.getElementById('detection-text').innerText = item.name;
+                document.getElementById('confidence-text').innerText = item.confidence;
+                document.getElementById('servo-text').innerText = 'Rotating to ' + item.type.toUpperCase();
+                
+                // 3. Update Counters
+                counts[item.type]++;
+                document.getElementById(`count-${item.type}`).innerText = counts[item.type];
+                
+                // 4. Item exits to bin
+                setTimeout(() => {
+                    div.style.transform = 'translateX(400px)';
+                    div.style.opacity = '0';
+                }, 1000);
+
+            }, 1000);
+        }
+
+        // Run simulation every 4 seconds
+        setInterval(simulateDetection, 4000);
+        simulateDetection();
+    </script>
+</body>
+</html>

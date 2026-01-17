@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortify: An AI and IoT Based Segregation System</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom style for better aesthetics (optional, but improves visual design) -->
+    <style>
+        /* Apply the Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            min-height: 100vh;
+        }
+        /* Custom gradient for a modern button feel */
+        .btn-gradient {
+            background-image: linear-gradient(to right, #4c51bf, #6b46c1);
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-gradient:hover {
+            background-image: linear-gradient(to right, #6b46c1, #4c51bf);
+            box-shadow: 0 4px 15px rgba(76, 81, 191, 0.4);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <!-- Navbar Container -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+
+                <!-- Logo / Title Section -->
+                <div class="flex-shrink-0">
+                    <span class="text-2xl font-extrabold text-gray-800">
+                        My Projects
+                    </span>
+                </div>
+
+                <!-- Navigation Links / Buttons - NOW THREE BUTTONS -->
+                <div class="flex space-x-4">
+                    <!-- Button 1 -->
+                    <!-- IMPORTANT: Replace 'project1.html' with the actual file path or URL for Project 1 -->
+                    <a href="project1.html" 
+                       class="nav-button btn-gradient text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out text-sm sm:text-base"
+                       role="button">
+                        Project Name 1
+                    </a>
+                    
+                    <!-- Button 2 -->
+                    <!-- IMPORTANT: Replace 'project2.html' with the actual file path or URL for Project 2 -->
+                    <a href="project2.html" 
+                       class="nav-button btn-gradient text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out text-sm sm:text-base"
+                       role="button">
+                        Project Name 2
+                    </a>
+                    
+                    <!-- NEW Button 3 -->
+                    <!-- IMPORTANT: Replace 'project3.html' with the actual file path or URL for Project 3 -->
+                    <a href="project3.html" 
+                       class="nav-button btn-gradient text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out text-sm sm:text-base"
+                       role="button">
+                        Project Name 3
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area Placeholder - Now Centered -->
+    <div class="max-w-7xl mx-auto p-8 mt-10 text-center">
+        <h1 class="text-3xl font-bold text-gray-700 mb-6">Welcome to the Project Site</h1>
+        
+        <!-- Centered Clickable Sentence/Line to Open New Page -->
+        <!-- IMPORTANT: Replace 'dashboard.html' with the actual page you want to open -->
+        <a href="dashboard.html" 
+           class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition duration-150 underline decoration-dashed hover:decoration-solid">
+           Sortify: An AI and IoT Based Segregation System
+        </a>
+        <p class="text-gray-500 mt-4 text-sm mb-12">
+            You can also use the Project buttons in the navigation bar above.
+        </p>
+
+        <!-- === PROJECT 1/DEFAULT CONTAINER === -->
+        <div class="bg-white p-8 rounded-2xl shadow-2xl mx-auto max-w-2xl border-4 border-indigo-200 w-full mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Project 1: Fruit Section Page</h2>
+            <p class="text-gray-600 mb-6">
+                This box represents the content area for your first project or main feature.
+            </p>
+
+            <!-- Small Box (Centered within the Big Box) -->
+            <div class="bg-indigo-50 p-4 rounded-xl shadow-inner mx-auto max-w-xs border-2 border-indigo-400">
+                <p class="text-base font-semibold text-indigo-700">
+                    Project 1: Small Box Detail
+                </p>
+                <p class="text-sm text-indigo-500 mt-1">
+                    This is a sub-section within the first project area.
+                </p>
+            </div>
+
+            <!-- NEW BUTTON FOR PROJECT 1 -->
+            <!-- IMPORTANT: Replace 'details1.html' with the page for Project 1 details -->
+            <a href="details1.html" 
+               class="inline-block mt-6 btn-gradient text-white font-semibold py-3 px-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300"
+               role="button">
+                Explore Project 1 Now
+            </a>
+        </div>
+        
+        <!-- === NEW PROJECT 2 CONTAINER === -->
+        <div class="bg-white p-8 rounded-2xl shadow-2xl mx-auto max-w-2xl border-4 border-emerald-200 w-full">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Project 2: Dry Garbage and Wet Garbage </h2>
+            <p class="text-gray-600 mb-6">
+                This is the container added for your second project.
+            </p>
+
+            <!-- Small Box (Centered within the Big Box) -->
+            <div class="bg-emerald-50 p-4 rounded-xl shadow-inner mx-auto max-w-xs border-2 border-emerald-400">
+                <p class="text-base font-semibold text-emerald-700">
+                    Project 2: Small Box Detail
+                </p>
+                <p class="text-sm text-emerald-500 mt-1">
+                    This is a sub-section within the second project area.
+                </p>
+            </div>
+
+            <!-- NEW BUTTON FOR PROJECT 2 -->
+            <!-- IMPORTANT: Replace 'details2.html' with the page for Project 2 details -->
+            <a href="details2.html" 
+               class="inline-block mt-6 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 px-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300"
+               role="button">
+                Explore Project 2 Now
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortify: AI Fruit Quality Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scan-line {
+            height: 2px;
+            background: rgba(34, 197, 94, 0.8);
+            box-shadow: 0 0 15px 5px rgba(34, 197, 94, 0.5);
+            position: absolute;
+            width: 100%;
+            animation: scan 2s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .popup-animate {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans">
+
+    <header class="bg-white border-b p-4 mb-6 shadow-sm">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-700">Fruit Quality AI</h1>
+            <a href="index.html" class="text-sm font-medium text-gray-500 hover:text-indigo-600">Return to Dashboard</a>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <section class="relative">
+            <div class="bg-black rounded-3xl overflow-hidden shadow-2xl border-8 border-gray-800 aspect-square relative">
+                <div id="camera-feed" class="w-full h-full flex items-center justify-center bg-gray-900">
+                    <img id="fruit-display" src="" class="w-2/3 h-2/3 object-contain transition-all duration-500">
+                </div>
+                <div class="scan-line"></div>
+                <div class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-widest">
+                    Live AI Feed
+                </div>
+            </div>
+        </section>
+
+        <section class="flex flex-col justify-center">
+            <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Real-time Analysis</h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase">Object Detected</label>
+                        <p id="fruit-name" class="text-3xl font-extrabold text-indigo-600">Scanning...</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-gray-50 rounded-2xl">
+                            <label class="text-xs font-bold text-gray-400 uppercase">Quality</label>
+                            <p id="quality-status" class="text-xl font-bold text-gray-700">--</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-2xl">
+                            <label class="text-xs font-bold text-gray-400 uppercase">Weight</label>
+                            <p id="weight-display" class="text-xl font-bold text-gray-700">0.00g</p>
+                        </div>
+                    </div>
+
+                    <div id="safety-card" class="mt-4 p-4 rounded-2xl text-center font-bold text-lg hidden">
+                        </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="notification-area" class="fixed top-20 right-6 z-50 flex flex-col gap-4 w-80"></div>
+
+    <script>
+        // Real Images URLs (You can replace these with your actual local project images)
+        const fruitData = [
+            { 
+                name: 'Apple', 
+                quality: 'Good', 
+                weight: '182g', 
+                safe: true, 
+                img: 'https://freshindiaorganics.com/cdn/shop/products/Apples.jpg?v=1686739530' 
+            },
+            { 
+                name: 'Banana', 
+                quality: 'Bad (Rotten)', 
+                weight: '120g', 
+                safe: false, 
+                img: 'https://media.istockphoto.com/id/1301198272/photo/dark-and-spoiled-banana-on-the-table-rotten-fruit.jpg?s=612x612&w=0&k=20&c=_3Llkp1sNS7bZtnVB6W9Zh6hhjoq4tCaa7sqhlJ1UPk=' 
+            },
+            { 
+                name: 'Onion', 
+                quality: 'Good', 
+                weight: '95g', 
+                safe: true, 
+                img: 'https://images.unsplash.com/photo-1508747703725-719777637510?w=200' 
+            }
+        ];
+    
+        function triggerCaptureEffect() {
+            const feed = document.getElementById('camera-feed');
+            feed.classList.add('bg-white'); // Flash effect
+            setTimeout(() => feed.classList.remove('bg-white'), 150);
+        }
+    
+        function showNotification(fruit) {
+            const area = document.getElementById('notification-area');
+            const note = document.createElement('div');
+            
+            // Dynamic styling based on safety
+            const borderColor = fruit.safe ? 'border-green-500' : 'border-red-500';
+            const bgColor = fruit.safe ? 'bg-white' : 'bg-red-50';
+    
+            note.className = `popup-animate p-0 rounded-2xl shadow-2xl overflow-hidden border-2 ${borderColor} ${bgColor}`;
+            
+            note.innerHTML = `
+                <div class="flex">
+                    <div class="w-1/3 h-24 bg-gray-200">
+                        <img src="${fruit.img}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-3 flex flex-col justify-center">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full ${fruit.safe ? 'bg-green-500' : 'bg-red-500'} animate-pulse"></span>
+                            <p class="text-xs font-bold text-gray-400 uppercase">Detection Result</p>
+                        </div>
+                        <p class="text-sm font-bold text-gray-800">${fruit.name} Identified</p>
+                        <p class="text-xs ${fruit.safe ? 'text-green-600' : 'text-red-600'} font-semibold">
+                            Status: ${fruit.safe ? 'Safe to Eat' : 'DO NOT CONSUME'}
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            area.prepend(note); // Add new notification to top
+            setTimeout(() => {
+                note.style.opacity = '0';
+                note.style.transform = 'translateX(20px)';
+                setTimeout(() => note.remove(), 500);
+            }, 4000);
+        }
+    
+        function runAI() {
+            // Pick a random fruit from the data
+            const fruit = fruitData[Math.floor(Math.random() * fruitData.length)];
+            
+            // 1. Update the "Live View" Image
+            document.getElementById('fruit-display').src = fruit.img;
+            document.getElementById('fruit-display').style.opacity = '1';
+    
+            // 2. Trigger Flash effect to simulate camera shutter
+            triggerCaptureEffect();
+    
+            // 3. Update Text Dashboard
+            document.getElementById('fruit-name').innerText = fruit.name;
+            document.getElementById('quality-status').innerText = fruit.quality;
+            document.getElementById('weight-display').innerText = fruit.weight;
+            
+            // 4. Update Safety Card
+            const safetyCard = document.getElementById('safety-card');
+            safetyCard.classList.remove('hidden');
+            safetyCard.className = `mt-4 p-4 rounded-2xl text-center font-bold text-lg ${fruit.safe ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
+            safetyCard.innerText = fruit.safe ? "✅ CONSUMPTION RECOMMENDED" : "⚠️ HEALTH HAZARD: DISCARD";
+    
+            // 5. Show Notification with the Image
+            showNotification(fruit);
+        }
+    
+        // Run the system every 6 seconds
+        setInterval(runAI, 6000);
+        window.onload = runAI;
+    </script>
+</body>
+</html>
